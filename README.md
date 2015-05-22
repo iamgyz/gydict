@@ -1,5 +1,5 @@
 # gydict
-A command line interface to do Eng&lt;->Chines translation, utilize by Yahoo! Dictionary.
+A command line interface to do Eng&lt;->Chinese translation, utilize by Yahoo! Dictionary.
 
 ### Usage  
 `python3 gydict.py <word>`  
