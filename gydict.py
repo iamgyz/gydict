@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
     Author : GYZheng, gyzheng@cs.nctu.edu.tw
     Feature : A command line interface to do Eng<->Chines translation, utilize by Yahoo! Dictionary
