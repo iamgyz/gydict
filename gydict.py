@@ -3,7 +3,7 @@
     Author : GYZheng, gyzheng@cs.nctu.edu.tw
     Feature : A command line interface to do Eng<->Chines translation, utilize by Yahoo! Dictionary
     Enviornment : Python3
-    Update date : 2015.05.22
+    Update date : 2015.09.05
     Usage : gydice <word>
 '''
 from html.parser import HTMLParser
@@ -16,26 +16,23 @@ class YDHTMLParser(HTMLParser):
         self.word = word
         self.wish_list =[]
         self.isTarget = False
-        self.isStart = False
-        self.isDone = False
+        self.isPrint = False
     #override
     def handle_starttag(self,tag,attrs):
-        if tag == 'h4' or tag == 'h3':
-            self.isTarget = True
-        elif tag == 'div':
+        if tag == 'div':
             for attr in attrs:
-                if attr[0]=='class' and attr[1] =='dd algo fst DictionaryResults':                
-                    if self.isStart == False:
-                        self.isStart = True
-                    elif self.isDone == False:
-                        self.isDone = True
-                if attr[0]=='class' and attr[1] == 'dd DictionaryK+DD':
-                    self.isDone = True
+                if attr[0]=='class' and attr[1]=='dd algo explain mt-20 lst DictionaryResults':
+                    self.isTarget = True;
+                elif attr[0]=='class' and attr[1].find('dd algo othersNew') != -1:
+                    self.isTarget = False;
+        elif tag == 'h3' or tag == 'h4' or tag == 'span' or tag == 'b':
+            self.isPrint = True
     def handle_data(self, data):
+        data = data.strip()
         #if not done and isTarget
-        if self.isStart and not self.isDone and self.isTarget:
+        if self.isTarget and self.isPrint and len(data)>0:
             print (data)
-            self.isTarget = False
+            self.isPrint = False
         else:
             pass
     def handle_endtag(self,tag):
@@ -60,11 +57,6 @@ class YDCrawer:
             parser = YDHTMLParser(strict=False)
             parser._init(self.word)
             parser.feed(content)
-            '''
-            if parser.get_wish_list():
-                for item in parser.get_wish_list():
-                    self.wish_list.append(item)
-            '''
         except:
             self.wish_list=[]
             self.wish_list.append('404 ERROR~~~~')
