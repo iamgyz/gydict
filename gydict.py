@@ -3,7 +3,7 @@
     Author : GYZheng, gyzheng@cs.nctu.edu.tw
     Feature : A command line interface to do Eng<->Chines translation, utilize by Yahoo! Dictionary
     Enviornment : Python3
-    Update date : 2015.09.05
+    Update date : 2016.01.04
     Usage : gydice <word>
 '''
 from html.parser import HTMLParser
@@ -54,12 +54,13 @@ class YDCrawer:
             request = urllib.request.Request(url)
             response = urllib.request.urlopen(request)
             content = response.read().decode('utf-8','ignore')
-            parser = YDHTMLParser(strict=False)
+            parser = YDHTMLParser()
             parser._init(self.word)
             parser.feed(content)
-        except:
+        except Exception as e:
             self.wish_list=[]
-            self.wish_list.append('404 ERROR~~~~')
+            self.wish_list.append(e)
+            print('Exception ',e)
     def get_result(self):
         return self.wish_list
 
