@@ -13,7 +13,6 @@ import sys
 
 class YDHTMLParser(HTMLParser):
     def _init(self,word):
-        self.word = word
         self.wish_list =[]
         self.isTarget = False
         self.isPrint = False
@@ -45,7 +44,7 @@ class YDCrawer:
         #user input
         self.word = urllib.parse.quote(word)
         #default settings
-        self.url_host = 'http://tw.dictionary.search.yahoo.com'
+        self.url_host = 'https://tw.dictionary.search.yahoo.com'
         self.url_path = '/search?p='+self.word
         self.wish_list= []
     def start(self):
