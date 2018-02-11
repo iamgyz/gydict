@@ -4,7 +4,7 @@
     Feature : A command line interface to do Eng<->Chines translation, utilize by Yahoo! Dictionary
     Enviornment : Python3
     Update date : 2016.01.04
-    Usage : gydice <word>
+    Usage : gydict <word>
 '''
 from html.parser import HTMLParser
 import http.cookiejar, urllib.request,urllib.parse
