@@ -4,7 +4,7 @@
     Feature : A command line interface to do Eng<->Chines translation, utilize by Yahoo! Dictionary
     Enviornment : Python3
     Update date : 2016.01.04
-    Usage : gydice <word>
+    Usage : gydict <word>
 '''
 from html.parser import HTMLParser
 import http.cookiejar, urllib.request,urllib.parse
@@ -12,9 +12,8 @@ import re
 import sys
 
 class YDHTMLParser(HTMLParser):
-    def _init(self,word):
-        self.word = word
-        self.wish_list =[]
+    def _init(self):
+    #    self.wish_list =[]
         self.isTarget = False
         self.isPrint = False
     #override
@@ -37,15 +36,15 @@ class YDHTMLParser(HTMLParser):
             pass
     def handle_endtag(self,tag):
         pass
-    def get_wish_list(self):
-        return self.wish_list
+#    def get_wish_list(self):
+#        return self.wish_list
 
 class YDCrawer:
     def __init__(self,word):
         #user input
         self.word = urllib.parse.quote(word)
         #default settings
-        self.url_host = 'http://tw.dictionary.search.yahoo.com'
+        self.url_host = 'https://tw.dictionary.search.yahoo.com'
         self.url_path = '/search?p='+self.word
         self.wish_list= []
     def start(self):
@@ -55,7 +54,7 @@ class YDCrawer:
             response = urllib.request.urlopen(request)
             content = response.read().decode('utf-8','ignore')
             parser = YDHTMLParser()
-            parser._init(self.word)
+            parser._init()
             parser.feed(content)
         except Exception as e:
             self.wish_list=[]
