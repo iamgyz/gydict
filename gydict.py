@@ -3,7 +3,7 @@
     Author : GYZheng, gyzheng@cs.nctu.edu.tw
     Feature : A command line interface to do Eng<->Chines translation, utilize by Yahoo! Dictionary
     Enviornment : Python3
-    Update date : 2016.01.04
+    Update date : 2019.10.05
     Usage : gydict <word>
 '''
 from html.parser import HTMLParser
@@ -13,31 +13,34 @@ import sys
 
 class YDHTMLParser(HTMLParser):
     def _init(self):
-    #    self.wish_list =[]
         self.isTarget = False
         self.isPrint = False
     #override
     def handle_starttag(self,tag,attrs):
         if tag == 'div':
             for attr in attrs:
-                if attr[0]=='class' and attr[1]=='dd algo explain mt-20 lst DictionaryResults':
-                    self.isTarget = True;
-                elif attr[0]=='class' and attr[1].find('dd algo othersNew') != -1:
-                    self.isTarget = False;
-        elif tag == 'h3' or tag == 'h4' or tag == 'span' or tag == 'b':
-            self.isPrint = True
+                #start condition
+                if attr[0]=='class' and attr[1].find('compList') != -1 and attr[1].find('p-rel') != -1:
+                    self.isTarget = True
+                #end condition for cht->eng
+                elif attr[0]=='class' and attr[1].find('cardDesign') != -1:
+                    self.isTarget = False
+        elif tag == 'ul':
+            for attr in attrs:
+                #end condition for eng->cht
+                if attr[0]=='class' and attr[1].find('compArticleList') != -1:
+                    self.isTarget = False
+
     def handle_data(self, data):
         data = data.strip()
-        #if not done and isTarget
-        if self.isTarget and self.isPrint and len(data)>0:
+        if self.isTarget and len(data)>0:
             print (data)
-            self.isPrint = False
         else:
             pass
+
     def handle_endtag(self,tag):
         pass
-#    def get_wish_list(self):
-#        return self.wish_list
+
 
 class YDCrawer:
     def __init__(self,word):
@@ -64,7 +67,6 @@ class YDCrawer:
         return self.wish_list
 
 if __name__ == '__main__':
-    #word = input('word = ')
     if len(sys.argv) != 2:
         print('Usage: gydict <word>')
         print('Example:')
